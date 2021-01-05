@@ -1,6 +1,6 @@
-const { Op } = require("sequelize");
-const connection = require('../koneksi');
-const Property = require("../models/property")(connection)
+const { Op } = require("sequelize")
+const connection = require('../koneksi')
+const Property = require('../models/property')(connection)
 const People = require('../models/people')(connection)
 const P_Role = require('../models/people_role')(connection)
 const Family = require('../models/family')(connection)

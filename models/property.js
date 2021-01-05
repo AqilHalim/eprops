@@ -133,6 +133,24 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "harga"
+    },
+    createdAt: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "createdAt"
+    },
+    updatedAt: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "updatedAt"
     }
   };
   const options = {

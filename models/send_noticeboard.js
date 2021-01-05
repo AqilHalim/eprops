@@ -13,18 +13,18 @@ module.exports = sequelize => {
       comment: null,
       field: "id_noticeboard",
       references: {
-        key: "id",
+        key: "id_noticeboard",
         model: "noticeboard_model"
       }
     },
-    id_customer: {
+    id_people: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "id_customer"
+      field: "id_people"
     },
     tanggaldikirim: {
       type: DataTypes.DATE,
@@ -34,6 +34,24 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "tanggaldikirim"
+    },
+    createdAt: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "createdAt"
+    },
+    updatedAt: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "updatedAt"
     }
   };
   const options = {

@@ -1,5 +1,4 @@
 const connection = require('../koneksi')
-const property = require('../models/property')
 const People = require('../models/people')(connection)
 const Property = require('../models/property')(connection)
 const Transaksi = require('../models/transaksi')(connection)
