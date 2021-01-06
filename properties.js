@@ -11,7 +11,7 @@ const propControl = require('./controller/propControl')
 router.get('/', propControl.getAll)                                 //menampilkan semua data
 router.get('/:id(\\d+)', propControl.getOne)                        //menampilakn berdasarkan id
 router.post('/', propControl.postOne)                               //menambahkan data
-router.put('/', propControl.putOne)                                 //mengubah data
-router.delete('/:id(\\d+)', propControl.delOne)                     //menghapus data
+router.put('/:id(\\d+)', propControl.putOne)                                 //mengubah data
+// router.delete('/:id(\\d+)', propControl.delOne)                     //menghapus data
 
 module.exports = router

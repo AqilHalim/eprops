@@ -12,12 +12,13 @@ router.get('/', peoControl.getAll)                                     //menampi
 router.get('/:id(\\d+)', peoControl.getOne)                            //menampilakn berdasarkan id
 router.post('/', peoControl.postOne)                                   //menambahkan data
 router.post('/:id(\\d+)/families', peoControl.postFamily)
-router.put('/:id(\\d+)', peoControl.putOne)                                     //mengubah data
+router.put('/:id(\\d+)', peoControl.putOne)                            //mengubah data
 router.delete('/:id(\\d+)', peoControl.delOne)                         //menghapus data
 
 router.get('/families', peoControl.getAllFamilies)                     //menampilakan families dari semua id
 router.get('/:id(\\d+)/families', peoControl.getOneFamily)             //menampilakan families berdasarkan id
 
+router.get('/properties', peoControl.getAllProperties)                 //menampilakan properties dari semua id
 router.get('/:id(\\d+)/properties/families', peoControl.getOneInfo)    //menampilakan info berdasarkan id
 
 module.exports = router

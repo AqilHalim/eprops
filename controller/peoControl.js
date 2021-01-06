@@ -173,21 +173,21 @@ exports.delOne = async function (req, res) {
 
 //menampilakan properties dari semua id
 exports.getAllProperties = async function (req, res) {
-    // try {
-    //     const people = await People.findAll({
-    //         include: Property
-    //     })
-    //     res.status(200).json({
-    //         message: 'Anda Berhasil',
-    //         status: 'success',
-    //         data: people
-    //     })
-    // } catch (err) {
-    //     res.status(500).json({
-    //         message: 'Terdapat Error: ' + err.message,
-    //         status: 'failed'
-    //     })
-    // }
+    try {
+        const people = await People.findAll({
+            include: Property
+        })
+        res.status(200).json({
+            message: 'Anda Berhasil',
+            status: 'success',
+            data: people
+        })
+    } catch (err) {
+        res.status(500).json({
+            message: 'Terdapat Error: ' + err.message,
+            status: 'failed'
+        })
+    }
 }
 
 //menampilakan properties berdasarkan id

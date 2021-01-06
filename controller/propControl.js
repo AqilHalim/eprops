@@ -60,11 +60,10 @@ exports.postOne = async function (req, res) {
         const property = await Property.create(req.body)
         const id_cust = property.id_people
         const id_prop = property.id_property
-        const hrg = property.harga
         await Transaksi.create({
             id_people: id_cust,
             id_property: id_prop,
-            jmlpembayaran: hrg
+            jmlpembayaran: req.body.harga
         })
         res.status(200).json({
             message: 'Anda Berhasil',
@@ -83,14 +82,13 @@ exports.putOne = async function (req, res) {
     try {
         await Property.update(req.body, {
             where: {
-                id_property: req.body.id_property
+                id_property: req.params.id
             }
-        }).then(() => {
-            Transaksi.findOrCreate({ jmlpembayaran: Property.harga }, {
-                where: {
-                    id_property: req.body.id_property,
-                }
-            })
+        })
+        await Transaksi.update({ jmlpembayaran: req.body.harga }, {
+            where: {
+                id_property: req.params.id
+            }
         })
         res.status(200).json({
             message: 'Anda Berhasil',
@@ -106,20 +104,20 @@ exports.putOne = async function (req, res) {
 
 //menghapus data
 exports.delOne = async function (req, res) {
-    try {
-        await Property.destroy({
-            where: {
-                id_property: req.params.id
-            }
-        })
-        res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success'
-        })
-    } catch (err) {
-        res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
-        })
-    }
+    // try {
+    //     await Property.destroy({
+    //         where: {
+    //             id_property: req.params.id
+    //         }
+    //     })
+    //     res.status(200).json({
+    //         message: 'Anda Berhasil',
+    //         status: 'success'
+    //     })
+    // } catch (err) {
+    //     res.status(500).json({
+    //         message: 'Terdapat Error: ' + err.message,
+    //         status: 'failed'
+    //     })
+    // }
 }
