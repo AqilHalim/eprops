@@ -23,6 +23,7 @@ exports.getAll = async function (req, res) {
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success',
+            total: properties.length,
             data: properties
         })
     } catch (err) {
