@@ -15,6 +15,8 @@ const family = require('./families')        //family.js
 app.use('/families', family)
 const transaksi = require('./transaksi')    //transaksi.js
 app.use('/transaksi', transaksi)
+const notice = require('./notice')    //transaksi.js
+app.use('/noticeboard', notice)
 
 app.listen(3000, () => {
     console.log('Server started on port 3000')

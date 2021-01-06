@@ -86,7 +86,12 @@ exports.postOne = async function (req, res) {
         const id = people.id_people
         await Family.create({
             id_people: id,
-            kk: req.body.kk
+            kk: req.body.kk,
+            role: req.body.role
+        })
+        await P_Role.create({
+            id_people: id,
+            jenisrole: req.body.jenisrole
         })
         res.status(200).json({
             message: 'Anda Berhasil',

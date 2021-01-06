@@ -4,17 +4,26 @@ const {
 
 module.exports = sequelize => {
   const attributes = {
-    id_noticeboard: {
+    id: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: true,
+      autoIncrement: true,
+      comment: null,
+      field: "id"
+    },
+    id_notice: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "id_noticeboard",
+      field: "id_notice",
       references: {
-        key: "id_noticeboard",
-        model: "noticeboard_model"
+        key: "id_notice",
+        model: "notice_model"
       }
     },
     id_people: {
@@ -25,15 +34,6 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "id_people"
-    },
-    tanggaldikirim: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "tanggaldikirim"
     },
     createdAt: {
       type: DataTypes.DATEONLY,
@@ -55,15 +55,15 @@ module.exports = sequelize => {
     }
   };
   const options = {
-    tableName: "send_noticeboard",
+    tableName: "send_notice",
     comment: "",
     indexes: [{
       name: "id_noticeboard",
       unique: false,
       type: "BTREE",
-      fields: ["id_noticeboard"]
+      fields: ["id_notice"]
     }]
   };
-  const SendNoticeboardModel = sequelize.define("send_noticeboard_model", attributes, options);
-  return SendNoticeboardModel;
+  const SendNoticeModel = sequelize.define("send_notice_model", attributes, options);
+  return SendNoticeModel;
 };
