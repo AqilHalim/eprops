@@ -84,7 +84,7 @@ exports.getOne = async function (req, res) {
 exports.postOne = async function (req, res) {
     try {
         const people = await People.create(req.body)
-        const id = people.id_people
+        const id = people.id_people //mengambil id_people dari record people dan memasukkannya dalam variable
         await Family.create({
             id_people: id,
             kk: req.body.kk,
@@ -198,24 +198,24 @@ exports.getAllProperties = async function (req, res) {
 
 //menampilakan properties berdasarkan id
 exports.getOneProperty = async function (req, res) {
-    // try {
-    //     const people = await People.findOne({
-    //         include: Property,
-    //         where: {
-    //             id_people: req.params.id
-    //         }
-    //     })
-    //     res.status(200).json({
-    //         message: 'Anda Berhasil',
-    //         status: 'success',
-    //         data: people
-    //     })
-    // } catch (err) {
-    //     res.status(500).json({
-    //         message: 'Terdapat Error: ' + err.message,
-    //         status: 'failed'
-    //     })
-    // }
+    try {
+        const people = await People.findOne({
+            include: Property,
+            where: {
+                id_people: req.params.id
+            }
+        })
+        res.status(200).json({
+            message: 'Anda Berhasil',
+            status: 'success',
+            data: people
+        })
+    } catch (err) {
+        res.status(500).json({
+            message: 'Terdapat Error: ' + err.message,
+            status: 'failed'
+        })
+    }
 }
 
 //menampilakan families dari semua id

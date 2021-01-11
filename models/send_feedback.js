@@ -42,7 +42,7 @@ module.exports = sequelize => {
     tanggalkirim: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      defaultValue: "0000-00-00 00:00:00",
       primaryKey: false,
       autoIncrement: false,
       comment: null,

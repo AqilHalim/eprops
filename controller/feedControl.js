@@ -2,6 +2,7 @@ const connection = require('../koneksi')
 const People = require('../models/people')(connection)
 const Notice = require('../models/notice')(connection)
 const Send = require('../models/send_feedback')(connection)
+const Status = require('../models/status_feedback')(connection)
 
 Notice.hasOne(Send, {
     foreignKey: 'id_notice'
@@ -14,6 +15,9 @@ People.hasMany(Send, {
 })
 Send.belongsTo(People, {
     foreignKey: 'id_people'
+})
+Status.hasOne(Send, {
+    foreignKey: 'id_feedback'
 })
 
 //menampilkan semua data
@@ -64,7 +68,8 @@ exports.postOne = async function (req, res) {
         for (var i = 0; i < member.length; i++) {
             await Send.create({
                 id_notice: id,
-                id_people: member[i]
+                id_people: member[i],
+                tanggalkirim: new Date()
             })
         }
         res.status(200).json({
@@ -86,6 +91,11 @@ exports.putOneProcess = async function (req, res) {
             where: {
                 id_people: req.params.id
             }
+        })
+        await Status.create({
+            id_feedback: req.params.id,
+            status: req.body.status,
+            id_user: req.body.id_user
         })
         res.status(200).json({
             message: 'Anda Berhasil Update',
