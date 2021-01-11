@@ -4,40 +4,45 @@ const {
 
 module.exports = sequelize => {
   const attributes = {
-    id: {
+    id_status: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: true,
       autoIncrement: true,
       comment: null,
-      field: "id"
+      field: "id_status"
     },
-    id_notice: {
+    id_feedback: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "id_notice",
+      field: "id_feedback",
       references: {
-        key: "id_notice",
-        model: "notice_model"
+        key: "id_feedback",
+        model: "send_feedback_model"
       }
     },
-    id_people: {
+    status: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "status"
+    },
+    id_user: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "id_people",
-      references: {
-        key: "id_people",
-        model: "people_model"
-      }
+      field: "id_user"
     },
     createdAt: {
       type: DataTypes.DATEONLY,
@@ -47,25 +52,27 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "createdAt"
+    },
+    updatedAt: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "updatedAt"
     }
   };
   const options = {
-    tableName: "send_notice",
-    timestamps: true,
-    updatedAt: false,
+    tableName: "status_feedback",
     comment: "",
     indexes: [{
-      name: "id_noticeboard",
+      name: "id_feedback",
       unique: false,
       type: "BTREE",
-      fields: ["id_notice"]
-    }, {
-      name: "id_people",
-      unique: false,
-      type: "BTREE",
-      fields: ["id_people"]
+      fields: ["id_feedback"]
     }]
   };
-  const SendNoticeModel = sequelize.define("send_notice_model", attributes, options);
-  return SendNoticeModel;
+  const StatusFeedbackModel = sequelize.define("status_feedback_model", attributes, options);
+  return StatusFeedbackModel;
 };
