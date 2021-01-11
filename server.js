@@ -17,7 +17,7 @@ const transaksi = require('./transaksi')    //transaksi.js
 app.use('/transaksi', transaksi)
 const notice = require('./notice')          //notice.js
 app.use('/noticeboard', notice)
-const feedback = require('./feedback')          //notice.js
+const feedback = require('./feedback')      //feedback.js
 app.use('/feedback', feedback)
 
 app.listen(3000, () => {

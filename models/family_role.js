@@ -21,10 +21,21 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "jenisrole"
+    },
+    createdAt: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "createdAt"
     }
   };
   const options = {
     tableName: "family_role",
+    timestamps: true,
+    updatedAt: false,
     comment: "",
     indexes: []
   };
