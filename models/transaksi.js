@@ -56,19 +56,12 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "createdAt"
-    },
-    updatedAt: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "updatedAt"
     }
   };
   const options = {
     tableName: "transaksi",
+    timestamps: true,
+    updatedAt: false,
     comment: "",
     indexes: [{
       name: "id_property",

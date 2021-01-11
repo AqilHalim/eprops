@@ -19,7 +19,7 @@ module.exports = sequelize => {
     },
     jenisrole: {
       type: DataTypes.STRING(50),
-      allowNull: false,
+      allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
