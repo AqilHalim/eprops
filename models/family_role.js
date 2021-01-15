@@ -34,8 +34,6 @@ module.exports = sequelize => {
   };
   const options = {
     tableName: "family_role",
-    timestamps: true,
-    updatedAt: false,
     comment: "",
     indexes: []
   };

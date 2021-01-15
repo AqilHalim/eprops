@@ -4,45 +4,31 @@ const {
 
 module.exports = sequelize => {
   const attributes = {
-    id_status: {
+    id_people: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: true,
-      autoIncrement: true,
-      comment: null,
-      field: "id_status"
-    },
-    id_feedback: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "id_feedback",
+      field: "id_people",
       references: {
-        key: "id_feedback",
-        model: "feedback_model"
+        key: "id_people",
+        model: "people_model"
       }
     },
-    status: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "status"
-    },
-    id_user: {
+    id_property: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
-      primaryKey: false,
+      primaryKey: true,
       autoIncrement: false,
       comment: null,
-      field: "id_user"
+      field: "id_property",
+      references: {
+        key: "id_property",
+        model: "property_model"
+      }
     },
     createdAt: {
       type: DataTypes.DATEONLY,
@@ -52,18 +38,27 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "createdAt"
+    },
+    updatedAt: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "updatedAt"
     }
   };
   const options = {
-    tableName: "status_feedback",
+    tableName: "unit",
     comment: "",
     indexes: [{
-      name: "id_feedback",
+      name: "id_property",
       unique: false,
       type: "BTREE",
-      fields: ["id_feedback"]
+      fields: ["id_property"]
     }]
   };
-  const StatusFeedbackModel = sequelize.define("status_feedback_model", attributes, options);
-  return StatusFeedbackModel;
+  const UnitModel = sequelize.define("unit_model", attributes, options);
+  return UnitModel;
 };

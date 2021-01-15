@@ -4,14 +4,14 @@ const {
 
 module.exports = sequelize => {
   const attributes = {
-    id_notice: {
+    id_message: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: true,
       autoIncrement: true,
       comment: null,
-      field: "id_notice"
+      field: "id_message"
     },
     subject: {
       type: DataTypes.STRING(50),
@@ -42,7 +42,7 @@ module.exports = sequelize => {
     },
     penerima: {
       type: DataTypes.ARRAY(DataTypes.STRING(50)),
-      allowNull: false,
+      allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
@@ -69,10 +69,10 @@ module.exports = sequelize => {
     }
   };
   const options = {
-    tableName: "notice",
+    tableName: "message",
     comment: "",
     indexes: []
   };
-  const NoticeModel = sequelize.define("notice_model", attributes, options);
-  return NoticeModel;
+  const MessageModel = sequelize.define("message_model", attributes, options);
+  return MessageModel;
 };

@@ -15,8 +15,8 @@ const family = require('./families')        //family.js
 app.use('/families', family)
 const transaksi = require('./transaksi')    //transaksi.js
 app.use('/transaksi', transaksi)
-const notice = require('./notice')          //notice.js
-app.use('/noticeboard', notice)
+const noticeboard = require('./noticeboard')          //notice.js
+app.use('/noticeboard', noticeboard)
 const feedback = require('./feedback')      //feedback.js
 app.use('/feedback', feedback)
 

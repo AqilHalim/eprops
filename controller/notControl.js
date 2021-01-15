@@ -1,25 +1,25 @@
 const connection = require('../koneksi')
 const People = require('../models/people')(connection)
-const Notice = require('../models/notice')(connection)
-const Send = require('../models/send_notice')(connection)
+const Msg = require('../models/message')(connection)
+const Notice = require('../models/noticeboard')(connection)
 
-Notice.hasOne(Send, {
-    foreignKey: 'id_notice'
+Msg.hasOne(Notice, {
+    foreignKey: 'id_message'
 })
-Send.belongsTo(Notice, {
-    foreignKey: 'id_notice'
+Notice.belongsTo(Msg, {
+    foreignKey: 'id_message'
 })
-People.hasMany(Send, {
+People.hasMany(Notice, {
     foreignKey: 'id_people'
 })
-Send.belongsTo(People, {
+Notice.belongsTo(People, {
     foreignKey: 'id_people'
 })
 
 //menampilkan semua data
 exports.getAll = async function (req, res) {
     try {
-        const notice = await Notice.findAll()
+        const notice = await Msg.findAll()
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success',
@@ -37,9 +37,9 @@ exports.getAll = async function (req, res) {
 //menampilkan berdasarkan id
 exports.getOne = async function (req, res) {
     try {
-        const notice = await Notice.findOne({
+        const notice = await Msg.findOne({
             where: {
-                id_notice: req.params.id
+                id_message: req.params.id
             }
         })
         res.status(200).json({
@@ -58,19 +58,63 @@ exports.getOne = async function (req, res) {
 //menambahkan data
 exports.postOne = async function (req, res) {
     try {
-        const notice = await Notice.create(req.body)
-        const id = notice.id_notice
+        const notice = await Msg.create(req.body)
+        const id = notice.id_message
         var member = notice.penerima
-        for (var i = 0; i < member.length; i++) {
-            await Send.create({
-                id_notice: id,
-                id_people: member[i]
-            })
+        if (member != null) {
+            for (var i = 0; i < member.length; i++) {
+                await Notice.create({
+                    id_message: id,
+                    id_people: member[i]
+                })
+            }
         }
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success '
         })
+    } catch (err) {
+        res.status(500).json({
+            message: 'Terdapat Error: ' + err.message,
+            status: 'failed'
+        })
+    }
+}
+
+//mengubah data
+exports.putOne = async function (req, res) {
+    try {
+        const msg = await Msg.findOne({
+            where: {
+                id_message: req.body.id_message
+            }
+        })
+        var penerima = msg.penerima
+        if (penerima == null) {
+            var member = []
+            const notice = await Msg.update(req.body, {
+                where: {
+                    id_message: req.body.id_message
+                }
+            })
+            const id = notice.id_message
+            var member = notice.penerima
+            // for (var i = 0; i < member.length; i++) {
+            //     await Notice.create({
+            //         id_message: id,
+            //         id_people: member[i]
+            //     })
+            // }
+            res.status(200).json({
+                message: 'Anda Berhasil',
+                status: 'success' + member.length
+            })
+        } else {
+            res.status(200).json({
+                message: 'Anda Tidak Bisa Mengedit Pesan',
+                status: 'failed'
+            })
+        }
     } catch (err) {
         res.status(500).json({
             message: 'Terdapat Error: ' + err.message,

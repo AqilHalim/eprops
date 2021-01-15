@@ -13,17 +13,17 @@ module.exports = sequelize => {
       comment: null,
       field: "id_feedback"
     },
-    id_notice: {
+    id_message: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "id_notice",
+      field: "id_message",
       references: {
-        key: "id_notice",
-        model: "notice_model"
+        key: "id_message",
+        model: "message_model"
       }
     },
     id_people: {
@@ -86,7 +86,7 @@ module.exports = sequelize => {
     }
   };
   const options = {
-    tableName: "send_feedback",
+    tableName: "feedback",
     timestamps: true,
     updatedAt: false,
     comment: "",
@@ -94,7 +94,7 @@ module.exports = sequelize => {
       name: "id_notice",
       unique: false,
       type: "BTREE",
-      fields: ["id_notice"]
+      fields: ["id_message"]
     }, {
       name: "id_people",
       unique: false,
@@ -102,6 +102,6 @@ module.exports = sequelize => {
       fields: ["id_people"]
     }]
   };
-  const SendFeedbackModel = sequelize.define("send_feedback_model", attributes, options);
-  return SendFeedbackModel;
+  const FeedbackModel = sequelize.define("feedback_model", attributes, options);
+  return FeedbackModel;
 };

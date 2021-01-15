@@ -48,6 +48,15 @@ module.exports = sequelize => {
       comment: null,
       field: "jmlpembayaran"
     },
+    status: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "status"
+    },
     createdAt: {
       type: DataTypes.DATEONLY,
       allowNull: false,
@@ -60,8 +69,6 @@ module.exports = sequelize => {
   };
   const options = {
     tableName: "transaksi",
-    timestamps: true,
-    updatedAt: false,
     comment: "",
     indexes: [{
       name: "id_property",

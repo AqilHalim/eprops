@@ -4,26 +4,26 @@ const {
 
 module.exports = sequelize => {
   const attributes = {
-    id: {
+    id_noticeboard: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: true,
       autoIncrement: true,
       comment: null,
-      field: "id"
+      field: "id_noticeboard"
     },
-    id_notice: {
+    id_message: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "id_notice",
+      field: "id_message",
       references: {
-        key: "id_notice",
-        model: "notice_model"
+        key: "id_message",
+        model: "message_model"
       }
     },
     id_people: {
@@ -50,7 +50,7 @@ module.exports = sequelize => {
     }
   };
   const options = {
-    tableName: "send_notice",
+    tableName: "noticeboard",
     timestamps: true,
     updatedAt: false,
     comment: "",
@@ -58,7 +58,7 @@ module.exports = sequelize => {
       name: "id_noticeboard",
       unique: false,
       type: "BTREE",
-      fields: ["id_notice"]
+      fields: ["id_message"]
     }, {
       name: "id_people",
       unique: false,
@@ -66,6 +66,6 @@ module.exports = sequelize => {
       fields: ["id_people"]
     }]
   };
-  const SendNoticeModel = sequelize.define("send_notice_model", attributes, options);
-  return SendNoticeModel;
+  const NoticeboardModel = sequelize.define("noticeboard_model", attributes, options);
+  return NoticeboardModel;
 };

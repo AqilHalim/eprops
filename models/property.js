@@ -13,19 +13,6 @@ module.exports = sequelize => {
       comment: null,
       field: "id_property"
     },
-    id_people: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "id_people",
-      references: {
-        key: "id_people",
-        model: "people_model"
-      }
-    },
     jenis: {
       type: DataTypes.STRING(20),
       allowNull: false,
@@ -156,12 +143,7 @@ module.exports = sequelize => {
   const options = {
     tableName: "property",
     comment: "",
-    indexes: [{
-      name: "id_customer",
-      unique: false,
-      type: "BTREE",
-      fields: ["id_people"]
-    }]
+    indexes: []
   };
   const PropertyModel = sequelize.define("property_model", attributes, options);
   return PropertyModel;

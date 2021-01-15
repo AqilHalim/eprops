@@ -1,12 +1,25 @@
 const { Op } = require("sequelize")
 const connection = require('../koneksi')
-const Property = require('../models/property')(connection)
 const People = require('../models/people')(connection)
+const Property = require('../models/property')(connection)
+const Unit = require('../models/unit')(connection)
 const P_Role = require('../models/people_role')(connection)
 const Family = require('../models/family')(connection)
 const F_Role = require('../models/family_role')(connection)
 const Transaksi = require('../models/transaksi')(connection)
 
+People.hasMany(Unit, {
+    foreignKey: 'id_people'
+})
+Unit.belongsTo(People, {
+    foreignKey: 'id_people'
+})
+Property.hasOne(Unit, {
+    foreignKey: 'id_people'
+})
+Unit.belongsTo(Property, {
+    foreignKey: 'id_people'
+})
 People.hasOne(Family, {
     foreignKey: 'id_people'
 })
@@ -17,12 +30,6 @@ People.hasOne(P_Role, {
     foreignKey: 'id_people'
 })
 P_Role.belongsTo(People, {
-    foreignKey: 'id_people'
-})
-People.hasMany(Property, {
-    foreignKey: 'id_people'
-})
-Property.belongsTo(People, {
     foreignKey: 'id_people'
 })
 F_Role.hasOne(Family, {
@@ -41,9 +48,7 @@ Transaksi.belongsTo(People, {
 //menampilkan semua data
 exports.getAll = async function (req, res) {
     try {
-        const people = await People.findAll({
-            include: [Property, P_Role]
-        })
+        const people = await People.findAll()
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success',
@@ -62,7 +67,6 @@ exports.getAll = async function (req, res) {
 exports.getOne = async function (req, res) {
     try {
         const people = await People.findOne({
-            include: Property,
             where: {
                 id_people: req.params.id
             }
@@ -180,8 +184,8 @@ exports.delOne = async function (req, res) {
 //menampilakan properties dari semua id
 exports.getAllProperties = async function (req, res) {
     try {
-        const people = await People.findAll({
-            include: Property
+        const people = await Unit.findAll({
+            include: [People, Property]
         })
         res.status(200).json({
             message: 'Anda Berhasil',
@@ -199,8 +203,8 @@ exports.getAllProperties = async function (req, res) {
 //menampilakan properties berdasarkan id
 exports.getOneProperty = async function (req, res) {
     try {
-        const people = await People.findOne({
-            include: Property,
+        const people = await Unit.findOne({
+            include: [People, Property],
             where: {
                 id_people: req.params.id
             }
