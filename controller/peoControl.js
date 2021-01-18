@@ -15,10 +15,10 @@ Unit.belongsTo(People, {
     foreignKey: 'id_people'
 })
 Property.hasOne(Unit, {
-    foreignKey: 'id_people'
+    foreignKey: 'id_property'
 })
 Unit.belongsTo(Property, {
-    foreignKey: 'id_people'
+    foreignKey: 'id_property'
 })
 People.hasOne(Family, {
     foreignKey: 'id_people'
