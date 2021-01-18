@@ -121,14 +121,14 @@ exports.putOne = async function (req, res) {
         const old_kk = kk1.kk
         const old_role = kk1.role
         if (old_role == 1) {
-            await Family.update(req.body, {
-                where: {
-                    kk: old_kk
-                }
-            })
             await People.update(req.body, {
                 where: {
                     id_people: req.params.id
+                }
+            })
+            await Family.update(req.body, {
+                where: {
+                    kk: old_kk
                 }
             })
         } else if (Family.kk == req.body.kk) {
@@ -143,10 +143,12 @@ exports.putOne = async function (req, res) {
                     id_people: req.params.id
                 }
             })
-            res.status(403).json({
-                message: 'Tidak Bisa Melakukan Update KK Selain Kepala Keluarga',
-                status: 'failed'
-            })
+            if (Family.kk != req.body.kk) {
+                res.status(403).json({
+                    message: 'Tidak Bisa Melakukan Update KK Selain Kepala Keluarga',
+                    status: 'failed'
+                })
+            }
         }
         res.status(200).json({
             message: 'Anda Berhasil',
@@ -163,12 +165,28 @@ exports.putOne = async function (req, res) {
 //menghapus data
 exports.delOne = async function (req, res) {
     try {
-        await People.destroy({
-            include: Family,
+        const kepala = await Family.findOne({
             where: {
                 id_people: req.params.id
             }
         })
+        const kk = kepala.kk
+        const kpl = kepala.role
+        if (kpl == 1) {
+            await Family.destroy({
+                include: People,
+                where: {
+                    kk: kk
+                }
+            })
+        } else if (kpl != 1) {
+            await People.destroy({
+                include: Family,
+                where: {
+                    id_people: req.params.id
+                }
+            })
+        }
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success'
@@ -181,16 +199,16 @@ exports.delOne = async function (req, res) {
     }
 }
 
-//menampilakan properties dari semua id
+//menampilakan properties dari semua id people
 exports.getAllProperties = async function (req, res) {
     try {
-        const people = await Unit.findAll({
+        const unit = await Unit.findAll({
             include: [People, Property]
         })
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success',
-            data: people
+            data: unit
         })
     } catch (err) {
         res.status(500).json({
@@ -200,7 +218,7 @@ exports.getAllProperties = async function (req, res) {
     }
 }
 
-//menampilakan properties berdasarkan id
+//menampilakan properties berdasarkan id people
 exports.getOneProperty = async function (req, res) {
     try {
         const people = await Unit.findOne({
@@ -222,7 +240,7 @@ exports.getOneProperty = async function (req, res) {
     }
 }
 
-//menampilakan families dari semua id
+//menampilakan families dari semua id people
 exports.getAllFamilies = async function (req, res) {
     try {
         const people = await People.findAll({
@@ -298,7 +316,7 @@ exports.getAllInfo = async function (req, res) {
     // }
 }
 
-//menampilakan info berdasarkan id
+//menampilakan info berdasarkan id people
 exports.getOneInfo = async function (req, res) {
     try {
         const people = await People.findOne({

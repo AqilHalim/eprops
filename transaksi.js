@@ -11,6 +11,4 @@ const transControl = require('./controller/transControl')
 router.get('/', transControl.getAll)                                     //menampilkan semua data
 router.get('/:id(\\d+)', transControl.getOne)                            //menampilakn berdasarkan id
 router.post('/', transControl.postOne)                                   //menambahkan data
-router.put('/', transControl.putOne)                                     //mengubah data
-
 module.exports = router

@@ -10,8 +10,5 @@ router.use(function timeLog(req, res, next) {
 const famControl = require('./controller/famControl')
 router.get('/', famControl.getAll)                                 //menampilkan semua data
 router.get('/:id(\\d+)', famControl.getOne)                        //menampilakn berdasarkan id
-router.post('/', famControl.postOne)                               //menambahkan data
-router.put('/', famControl.putOne)                                 //mengubah data
-router.delete('/:id(\\d+)', famControl.delOne)                     //menghapus data
 
 module.exports = router

@@ -60,7 +60,7 @@ module.exports = sequelize => {
       type: "BTREE",
       fields: ["id_message"]
     }, {
-      name: "id_people",
+      name: "noticeboard_ibfk_2",
       unique: false,
       type: "BTREE",
       fields: ["id_people"]

@@ -2,11 +2,18 @@ const connection = require('../koneksi')
 const People = require('../models/people')(connection)
 const Property = require('../models/property')(connection)
 const Transaksi = require('../models/transaksi')(connection)
+const Unit = require('../models/unit.js')(connection)
 
-People.hasMany(Property, {
+People.hasMany(Unit, {
     foreignKey: 'id_people'
 })
-Property.belongsTo(People, {
+Unit.belongsTo(People, {
+    foreignKey: 'id_people'
+})
+Property.hasOne(Unit, {
+    foreignKey: 'id_people'
+})
+Unit.belongsTo(Property, {
     foreignKey: 'id_people'
 })
 Property.hasMany(Transaksi, {
@@ -59,10 +66,8 @@ exports.getOne = async function (req, res) {
 exports.postOne = async function (req, res) {
     try {
         const property = await Property.create(req.body)
-        const id_cust = property.id_people
         const id_prop = property.id_property
         await Transaksi.create({
-            id_people: id_cust,
             id_property: id_prop,
             jmlpembayaran: req.body.harga
         })
