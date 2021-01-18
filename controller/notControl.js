@@ -91,23 +91,22 @@ exports.putOne = async function (req, res) {
         })
         var penerima = msg.penerima
         if (penerima == null) {
-            var member = []
-            const notice = await Msg.update(req.body, {
+            await Msg.update(req.body, {
                 where: {
                     id_message: req.body.id_message
                 }
             })
-            const id = notice.id_message
-            var member = notice.penerima
-            // for (var i = 0; i < member.length; i++) {
-            //     await Notice.create({
-            //         id_message: id,
-            //         id_people: member[i]
-            //     })
-            // }
+            const id = req.body.id_message
+            var member = req.body.penerima
+            for (var i = 0; i < member.length; i++) {
+                await Notice.create({
+                    id_message: id,
+                    id_people: member[i]
+                })
+            }
             res.status(200).json({
                 message: 'Anda Berhasil',
-                status: 'success' + member.length
+                status: 'success'
             })
         } else {
             res.status(200).json({
