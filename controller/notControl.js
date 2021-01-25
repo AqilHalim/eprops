@@ -19,7 +19,9 @@ Notice.belongsTo(People, {
 //menampilkan semua data
 exports.getAll = async function (req, res) {
     try {
-        const notice = await Msg.findAll()
+        const notice = await Notice.findAll({
+            include: Msg
+        })
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success',

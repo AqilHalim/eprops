@@ -1,34 +1,36 @@
 const connection = require('../koneksi')
 const People = require('../models/people')(connection)
 const Msg = require('../models/message')(connection)
-const Send = require('../models/feedback')(connection)
+const Feed = require('../models/feedback')(connection)
 const Status = require('../models/status_feedback')(connection)
 
-Msg.hasOne(Send, {
+Msg.hasOne(Feed, {
     foreignKey: 'id_message'
 })
-Send.belongsTo(Msg, {
+Feed.belongsTo(Msg, {
     foreignKey: 'id_message'
 })
-People.hasMany(Send, {
+People.hasMany(Feed, {
     foreignKey: 'id_people'
 })
-Send.belongsTo(People, {
+Feed.belongsTo(People, {
     foreignKey: 'id_people'
 })
-Status.hasOne(Send, {
+Status.hasOne(Feed, {
     foreignKey: 'id_feedback'
 })
 
 //menampilkan semua data
 exports.getAll = async function (req, res) {
     try {
-        const notice = await Msg.findAll()
+        const feed = await Feed.findAll({
+            include: Msg
+        })
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success',
-            total: notice.length,
-            data: notice
+            total: feed.length,
+            data: feed
         })
     } catch (err) {
         res.status(500).json({
@@ -41,7 +43,7 @@ exports.getAll = async function (req, res) {
 //menampilkan berdasarkan id
 exports.getOne = async function (req, res) {
     try {
-        const notice = await Msg.findOne({
+        const msg = await Msg.findOne({
             where: {
                 id_message: req.params.id
             }
@@ -49,7 +51,7 @@ exports.getOne = async function (req, res) {
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success',
-            data: notice
+            data: msg
         })
     } catch (err) {
         res.status(500).json({
@@ -62,13 +64,14 @@ exports.getOne = async function (req, res) {
 //menambahkan data
 exports.postOne = async function (req, res) {
     try {
-        const notice = await Msg.create(req.body)
-        const id = notice.id_message
-        var member = notice.penerima
+        const msg = await Msg.create(req.body)
+        const id = msg.id_message
+        var member = msg.penerima
         for (var i = 0; i < member.length; i++) {
-            await Send.create({
+            await Feed.create({
                 id_message: id,
                 id_people: member[i],
+                id_kategori: req.body.id_kategori,
                 tanggalkirim: new Date()
             })
         }
@@ -87,7 +90,7 @@ exports.postOne = async function (req, res) {
 //mengubah data process
 exports.putOneProcess = async function (req, res) {
     try {
-        await Send.update({ tanggalproses: new Date() }, {
+        await Feed.update({ tanggalproses: new Date() }, {
             where: {
                 id_people: req.params.id
             }
@@ -112,7 +115,7 @@ exports.putOneProcess = async function (req, res) {
 //mengubah data finish
 exports.putOneFinish = async function (req, res) {
     try {
-        await Send.update({ tanggalselesai: new Date() }, {
+        await Feed.update({ tanggalselesai: new Date() }, {
             where: {
                 id_people: req.params.id
             }
@@ -132,7 +135,7 @@ exports.putOneFinish = async function (req, res) {
 //mengubah data read
 exports.putOneRead = async function (req, res) {
     try {
-        await Send.update({ tanggalbaca: new Date() }, {
+        await Feed.update({ tanggalbaca: new Date() }, {
             where: {
                 id_people: req.params.id
             }

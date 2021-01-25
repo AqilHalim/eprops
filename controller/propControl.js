@@ -65,12 +65,7 @@ exports.getOne = async function (req, res) {
 //menambahkan data
 exports.postOne = async function (req, res) {
     try {
-        const property = await Property.create(req.body)
-        const id_prop = property.id_property
-        await Transaksi.create({
-            id_property: id_prop,
-            jmlpembayaran: req.body.harga
-        })
+        await Property.create(req.body)
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success'
@@ -87,11 +82,6 @@ exports.postOne = async function (req, res) {
 exports.putOne = async function (req, res) {
     try {
         await Property.update(req.body, {
-            where: {
-                id_property: req.params.id
-            }
-        })
-        await Transaksi.update({ jmlpembayaran: req.body.harga }, {
             where: {
                 id_property: req.params.id
             }

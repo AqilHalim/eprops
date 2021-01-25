@@ -39,6 +39,19 @@ module.exports = sequelize => {
         model: "people_model"
       }
     },
+    id_kategori: {
+      type: DataTypes.INTEGER(10),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "id_kategori",
+      references: {
+        key: "id_kategori",
+        model: "feedback_kategori_model"
+      }
+    },
     tanggalkirim: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -100,6 +113,11 @@ module.exports = sequelize => {
       unique: false,
       type: "BTREE",
       fields: ["id_people"]
+    }, {
+      name: "id_kategori",
+      unique: false,
+      type: "BTREE",
+      fields: ["id_kategori"]
     }]
   };
   const FeedbackModel = sequelize.define("feedback_model", attributes, options);

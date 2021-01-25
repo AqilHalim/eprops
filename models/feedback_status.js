@@ -55,7 +55,9 @@ module.exports = sequelize => {
     }
   };
   const options = {
-    tableName: "status_feedback",
+    tableName: "feedback_status",
+    timestamps: true,
+    updatedAt: false,
     comment: "",
     indexes: [{
       name: "id_feedback",
@@ -64,6 +66,6 @@ module.exports = sequelize => {
       fields: ["id_feedback"]
     }]
   };
-  const StatusFeedbackModel = sequelize.define("status_feedback_model", attributes, options);
-  return StatusFeedbackModel;
+  const FeedbackStatusModel = sequelize.define("feedback_status_model", attributes, options);
+  return FeedbackStatusModel;
 };
