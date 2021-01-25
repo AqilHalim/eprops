@@ -2,7 +2,8 @@ const connection = require('../koneksi')
 const People = require('../models/people')(connection)
 const Msg = require('../models/message')(connection)
 const Feed = require('../models/feedback')(connection)
-const Status = require('../models/status_feedback')(connection)
+const Status = require('../models/feedback_status')(connection)
+const Kategori = require('../models/feedback_kategori')(connection)
 
 Msg.hasOne(Feed, {
     foreignKey: 'id_message'
@@ -16,15 +17,24 @@ People.hasMany(Feed, {
 Feed.belongsTo(People, {
     foreignKey: 'id_people'
 })
-Status.hasOne(Feed, {
+Feed.hasOne(Status, {
     foreignKey: 'id_feedback'
+})
+Status.belongsTo(Feed, {
+    foreignKey: 'id_feedback'
+})
+Kategori.hasMany(Feed, {
+    foreignKey: 'id_kategori'
+})
+Feed.belongsTo(Kategori, {
+    foreignKey: 'id_kategori'
 })
 
 //menampilkan semua data
 exports.getAll = async function (req, res) {
     try {
         const feed = await Feed.findAll({
-            include: Msg
+            include: ([Msg, Kategori])
         })
         res.status(200).json({
             message: 'Anda Berhasil',
@@ -43,7 +53,9 @@ exports.getAll = async function (req, res) {
 //menampilkan berdasarkan id
 exports.getOne = async function (req, res) {
     try {
-        const msg = await Msg.findOne({
+        const feed = await Feed.findOne({
+            include: ([Msg, Kategori])
+        }, {
             where: {
                 id_message: req.params.id
             }
@@ -51,7 +63,7 @@ exports.getOne = async function (req, res) {
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success',
-            data: msg
+            data: feed
         })
     } catch (err) {
         res.status(500).json({
