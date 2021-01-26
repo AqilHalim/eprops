@@ -23,4 +23,6 @@ router.get('/:id(\\d+)/families', peoControl.getOneFamily)             //menampi
 
 router.get('/:id(\\d+)/properties/families', peoControl.getOneInfo)    //menampilakan info berdasarkan id
 
+router.get('/:id(\\d+)/feedback', peoControl.getOneFeed)               //menampilakan feedback berdasarkan id
+
 module.exports = router

@@ -7,6 +7,7 @@ const P_Role = require('../models/people_role')(connection)
 const Family = require('../models/family')(connection)
 const F_Role = require('../models/family_role')(connection)
 const Transaksi = require('../models/transaksi')(connection)
+const Feed = require('../models/feedback')(connection)
 
 People.hasMany(Unit, {
     foreignKey: 'id_people'
@@ -42,6 +43,12 @@ People.hasMany(Transaksi, {
     foreignKey: 'id_people'
 })
 Transaksi.belongsTo(People, {
+    foreignKey: 'id_people'
+})
+People.hasMany(Feed, {
+    foreignKey: 'id_people'
+})
+Feed.belongsTo(People, {
     foreignKey: 'id_people'
 })
 
@@ -290,7 +297,7 @@ exports.getOneFamily = async function (req, res) {
             message: 'Terdapat Error: ' + err.message,
             status: 'failed'
         })
-    } R
+    }
 }
 
 //menampilakan info dari semua id
@@ -347,6 +354,40 @@ exports.getOneInfo = async function (req, res) {
             status: 'failed'
         })
     }
+}
+
+//menampilakan feedback berdasarkan id
+exports.getOneFeed = async function (req, res) {
+    try {
+        const people = await People.findOne({
+            include: Feed,
+            where: {
+                id_people: req.params.id
+            }
+        })
+        // const fam = people.family_model.kk
+        // const family = await Family.findAll({
+        //     include: ([People, F_Role]),
+        //     where: {
+        //         kk: fam,
+        //         id_people: {
+        //             [Op.ne]: req.params.id
+        //         }
+        //     }
+        // })
+        // var cust = people.toJSON()
+        // cust.family_model = family
+        res.status(200).json({
+            message: 'Anda Berhasil',
+            status: 'success',
+            data: people
+        })
+    } catch (err) {
+        res.status(500).json({
+            message: 'Terdapat Error: ' + err.message,
+            status: 'failed'
+        })
+    } R
 }
 
 exports.postFamily = async function (req, res) {
