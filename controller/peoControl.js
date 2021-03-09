@@ -1,12 +1,11 @@
 const { Op } = require("sequelize")
-const connection = require('../koneksi')
+const connection = require('../connection')
 const People = require('../models/people')(connection)
 const Property = require('../models/property')(connection)
 const Unit = require('../models/unit')(connection)
 const P_Role = require('../models/people_role')(connection)
 const Family = require('../models/family')(connection)
 const F_Role = require('../models/family_role')(connection)
-const Transaksi = require('../models/transaksi')(connection)
 const Feed = require('../models/feedback')(connection)
 
 People.hasMany(Unit, {
@@ -39,12 +38,6 @@ F_Role.hasOne(Family, {
 Family.belongsTo(F_Role, {
     foreignKey: 'role'
 })
-People.hasMany(Transaksi, {
-    foreignKey: 'id_people'
-})
-Transaksi.belongsTo(People, {
-    foreignKey: 'id_people'
-})
 People.hasMany(Feed, {
     foreignKey: 'id_people'
 })
@@ -55,17 +48,21 @@ Feed.belongsTo(People, {
 //menampilkan semua data
 exports.getAll = async function (req, res) {
     try {
-        const people = await People.findAll()
+        const people = await People.findAll({
+            attributes: {
+                exclude: 'updatedAt'
+            }
+        })
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             total: people.length,
             data: people
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         });
     }
 }
@@ -76,17 +73,27 @@ exports.getOne = async function (req, res) {
         const people = await People.findOne({
             where: {
                 id_people: req.params.id
+            },
+            attributes: {
+                exclude: 'updatedAt'
             }
         })
+        if (!people) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             data: people
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -94,6 +101,18 @@ exports.getOne = async function (req, res) {
 //menambahkan data
 exports.postOne = async function (req, res) {
     try {
+        const peopleExist = await People.count({
+            where: {
+                nik: nik
+            }
+        })
+        if (peopleExist) {
+            res.status(200).json({
+                message: 'duplicate nik',
+                status: false
+            })
+            return
+        }
         const people = await People.create(req.body)
         const id = people.id_people //mengambil id_people dari record people dan memasukkannya dalam variable
         await Family.create({
@@ -106,13 +125,13 @@ exports.postOne = async function (req, res) {
             jenisrole: req.body.jenisrole
         })
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success'
+            message: 'success',
+            status: true
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -120,51 +139,46 @@ exports.postOne = async function (req, res) {
 //mengubah data
 exports.putOne = async function (req, res) {
     try {
-        const kk1 = await Family.findOne({
+        const kk = await Family.findOne({
             where: {
                 id_people: req.params.id
             }
         })
-        const old_kk = kk1.kk
-        const old_role = kk1.role
-        if (old_role == 1) {
-            await People.update(req.body, {
-                where: {
-                    id_people: req.params.id
-                }
+        if (!kk) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
             })
+            return
+        }
+        const old_kk = kk.kk
+        const old_role = kk.role
+        await People.update(req.body, {
+            where: {
+                id_people: req.params.id
+            }
+        })
+        if (Family.kk != req.body.kk) {
+            res.status(403).json({
+                message: 'Tidak Bisa Melakukan Update KK Selain Kepala Keluarga',
+                status: false
+            })
+            return
+        } else if (old_role == 1) {
             await Family.update(req.body, {
                 where: {
                     kk: old_kk
                 }
             })
-        } else if (Family.kk == req.body.kk) {
-            await People.update(req.body, {
-                where: {
-                    id_people: req.params.id
-                }
-            })
-        } else {
-            await People.update(req.body, {
-                where: {
-                    id_people: req.params.id
-                }
-            })
-            if (Family.kk != req.body.kk) {
-                res.status(403).json({
-                    message: 'Tidak Bisa Melakukan Update KK Selain Kepala Keluarga',
-                    status: 'failed'
-                })
-            }
         }
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success'
+            message: 'success',
+            status: true
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -177,31 +191,36 @@ exports.delOne = async function (req, res) {
                 id_people: req.params.id
             }
         })
+        if (!kepala) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         const kk = kepala.kk
         const kpl = kepala.role
+        await People.destroy({
+            include: Family,
+            where: {
+                id_people: req.params.id
+            }
+        })
         if (kpl == 1) {
             await Family.destroy({
-                include: People,
                 where: {
                     kk: kk
                 }
             })
-        } else if (kpl != 1) {
-            await People.destroy({
-                include: Family,
-                where: {
-                    id_people: req.params.id
-                }
-            })
         }
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success'
+            message: 'success',
+            status: true
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -213,14 +232,14 @@ exports.getAllProperties = async function (req, res) {
             include: [People, Property]
         })
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             data: unit
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -234,15 +253,22 @@ exports.getOneProperty = async function (req, res) {
                 id_people: req.params.id
             }
         })
+        if (!people) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             data: people
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -254,14 +280,14 @@ exports.getAllFamilies = async function (req, res) {
             include: Family
         })
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             data: people
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -275,6 +301,13 @@ exports.getOneFamily = async function (req, res) {
                 id_people: req.params.id
             }
         })
+        if (!people) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         const fam = people.family_model.kk
         const family = await Family.findAll({
             include: ([People, F_Role]),
@@ -288,39 +321,16 @@ exports.getOneFamily = async function (req, res) {
         var cust = people.toJSON()
         cust.family_model = family
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             data: cust
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
-}
-
-//menampilakan info dari semua id
-exports.getAllInfo = async function (req, res) {
-    // try {
-    //     const people = await People.findAll({
-    //         // include: Family,
-    //         include: {
-    //             model: Property,
-    //             include: Family
-    //         }
-    //     })
-    //     res.status(200).json({
-    //         message: 'Anda Berhasil',
-    //         status: 'success',
-    //         data: people
-    //     })
-    // } catch (err) {
-    //     res.status(500).json({
-    //         message: 'Terdapat Error: ' + err.message,
-    //         status: 'failed'
-    //     })
-    // }
 }
 
 //menampilakan info berdasarkan id people
@@ -331,6 +341,13 @@ exports.getOneInfo = async function (req, res) {
                 id_people: req.params.id
             }
         })
+        if (!people) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         const fam = people.family_model.kk
         const family = await Family.findAll({
             include: ([People, F_Role]),
@@ -344,14 +361,14 @@ exports.getOneInfo = async function (req, res) {
         var cust = people.toJSON()
         cust.family_model = family
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             data: cust
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -365,18 +382,13 @@ exports.getOneFeed = async function (req, res) {
                 id_people: req.params.id
             }
         })
-        // const fam = people.family_model.kk
-        // const family = await Family.findAll({
-        //     include: ([People, F_Role]),
-        //     where: {
-        //         kk: fam,
-        //         id_people: {
-        //             [Op.ne]: req.params.id
-        //         }
-        //     }
-        // })
-        // var cust = people.toJSON()
-        // cust.family_model = family
+        if (!people) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         res.status(200).json({
             message: 'Anda Berhasil',
             status: 'success',
@@ -397,15 +409,20 @@ exports.postFamily = async function (req, res) {
             res.status(404)
             return
         }
+        if (!head) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         const families = req.body.data
-
         families.forEach(family => {
             if (head.kk != family.kk) {
                 res.status(400).json({ message: "KK tidak sama dengan kepala keluarga" })
                 return
             }
         })
-
         var data_disave
         families.forEach(family => {
             data_disave = {

@@ -1,4 +1,4 @@
-const connection = require('../koneksi')
+const connection = require('../connection')
 const custModel = require('../models/people')
 const famModel = require('../models/family')
 
@@ -14,15 +14,15 @@ exports.getAll = async function (req, res) {
     try {
         const families = await Family.findAll()
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             total: families.length,
             data: families
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error',
-            status: 'failed'
+            message: 'error' + err.message,
+            status: false
         });
     }
 }
@@ -35,15 +35,22 @@ exports.getOne = async function (req, res) {
                 id_family: req.params.id
             }
         })
+        if (!family) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             data: family
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error',
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }

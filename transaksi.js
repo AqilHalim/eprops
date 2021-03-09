@@ -9,6 +9,6 @@ router.use(function timeLog(req, res, next) {
 
 const transControl = require('./controller/transControl')
 router.get('/', transControl.getAll)                                     //menampilkan semua data
-router.get('/:id(\\d+)', transControl.getOne)                            //menampilakn berdasarkan id
+router.get('/:id([0-9]+)', transControl.getOne)                            //menampilakn berdasarkan id
 router.post('/', transControl.postOne)                                   //menambahkan data
 module.exports = router

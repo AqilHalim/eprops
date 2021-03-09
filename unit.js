@@ -9,7 +9,7 @@ router.use(function timeLog(req, res, next) {
 
 const unitControl = require('./controller/unitControl')
 router.get('/', unitControl.getAll)                             //menampilkan semua data
-router.get('/:id(\\d+)', unitControl.getOne)                    //menampilakn berdasarkan id
-router.put('/:id(\\d+)', unitControl.putOne)             //mengubah data
+router.get('/:id([0-9]+)', unitControl.getOne)                    //menampilakn berdasarkan id
+router.put('/:id([0-9]+)', unitControl.putOne)             //mengubah data
 
 module.exports = router

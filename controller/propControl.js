@@ -1,4 +1,4 @@
-const connection = require('../koneksi')
+const connection = require('../connection')
 const People = require('../models/people')(connection)
 const Property = require('../models/property')(connection)
 const Transaksi = require('../models/transaksi')(connection)
@@ -28,15 +28,15 @@ exports.getAll = async function (req, res) {
     try {
         const properties = await Property.findAll()
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             total: properties.length,
             data: properties
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         });
     }
 }
@@ -49,15 +49,22 @@ exports.getOne = async function (req, res) {
                 id_property: req.params.id
             }
         })
+        if (!property) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             data: property
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -67,13 +74,13 @@ exports.postOne = async function (req, res) {
     try {
         await Property.create(req.body)
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success'
+            message: 'success',
+            status: true
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -81,19 +88,31 @@ exports.postOne = async function (req, res) {
 //mengubah data
 exports.putOne = async function (req, res) {
     try {
+        const property = await Property.findOne({
+            where: {
+                id_property: req.params.id
+            }
+        })
+        if (!property) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         await Property.update(req.body, {
             where: {
                 id_property: req.params.id
             }
         })
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success'
+            message: 'success',
+            status: true
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -107,13 +126,13 @@ exports.delOne = async function (req, res) {
     //         }
     //     })
     //     res.status(200).json({
-    //         message: 'Anda Berhasil',
-    //         status: 'success'
+    //         message: 'success',
+    //         status: true
     //     })
     // } catch (err) {
     //     res.status(500).json({
-    //         message: 'Terdapat Error: ' + err.message,
-    //         status: 'failed'
+    //         message: 'error: ' + err.message,
+    //         status: false
     //     })
     // }
 }

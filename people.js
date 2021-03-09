@@ -9,20 +9,20 @@ router.use(function timeLog(req, res, next) {
 
 const peoControl = require('./controller/peoControl')
 router.get('/', peoControl.getAll)                                     //menampilkan semua data
-router.get('/:id(\\d+)', peoControl.getOne)                            //menampilakn berdasarkan id
+router.get('/:id([0-9]+)', peoControl.getOne)                            //menampilakn berdasarkan id
 router.post('/', peoControl.postOne)                                   //menambahkan data
-router.post('/:id(\\d+)/families', peoControl.postFamily)
-router.put('/:id(\\d+)', peoControl.putOne)                            //mengubah data
-router.delete('/:id(\\d+)', peoControl.delOne)                         //menghapus data
+router.post('/:id([0-9]+)/families', peoControl.postFamily)
+router.put('/:id([0-9]+)', peoControl.putOne)                            //mengubah data
+router.delete('/:id([0-9]+)', peoControl.delOne)                         //menghapus data
 
 router.get('/properties', peoControl.getAllProperties)                 //menampilakan properties dari semua id
-router.get('/:id(\\d+)/properties', peoControl.getOneProperty)         //menampilakan properties berdasarkan id
+router.get('/:id([0-9]+)/properties', peoControl.getOneProperty)         //menampilakan properties berdasarkan id
 
 router.get('/families', peoControl.getAllFamilies)                     //menampilakan families dari semua id
-router.get('/:id(\\d+)/families', peoControl.getOneFamily)             //menampilakan families berdasarkan id
+router.get('/:id([0-9]+)/families', peoControl.getOneFamily)             //menampilakan families berdasarkan id
 
-router.get('/:id(\\d+)/properties/families', peoControl.getOneInfo)    //menampilakan info berdasarkan id
+router.get('/:id([0-9]+)/properties/families', peoControl.getOneInfo)    //menampilakan info berdasarkan id
 
-router.get('/:id(\\d+)/feedback', peoControl.getOneFeed)               //menampilakan feedback berdasarkan id
+router.get('/:id([0-9]+)/feedback', peoControl.getOneFeed)               //menampilakan feedback berdasarkan id
 
 module.exports = router

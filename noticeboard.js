@@ -9,7 +9,7 @@ router.use(function timeLog(req, res, next) {
 
 const notControl = require('./controller/notControl')
 router.get('/', notControl.getAll)                          //menampilkan semua data
-router.get('/:id(\\d+)', notControl.getOne)                 //menampilakn berdasarkan id
+router.get('/:id([0-9]+)', notControl.getOne)                 //menampilakn berdasarkan id
 router.post('/', notControl.postOne)                        //menambahkan data
 router.put('/', notControl.putOne)                          //mengubah data
 

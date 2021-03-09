@@ -1,4 +1,4 @@
-const connection = require('../koneksi')
+const connection = require('../connection')
 const People = require('../models/people')(connection)
 const Msg = require('../models/message')(connection)
 const Feed = require('../models/feedback')(connection)
@@ -37,15 +37,15 @@ exports.getAll = async function (req, res) {
             include: ([Msg, Kategori])
         })
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             total: feed.length,
             data: feed
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         });
     }
 }
@@ -60,15 +60,22 @@ exports.getOne = async function (req, res) {
                 id_message: req.params.id
             }
         })
+        if (!feed) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success',
+            message: 'success',
+            status: true,
             data: feed
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -88,13 +95,13 @@ exports.postOne = async function (req, res) {
             })
         }
         res.status(200).json({
-            message: 'Anda Berhasil',
-            status: 'success '
+            message: 'success',
+            status: true
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -102,24 +109,31 @@ exports.postOne = async function (req, res) {
 //mengubah data process
 exports.putOneProcess = async function (req, res) {
     try {
-        await Feed.update({ tanggalproses: new Date() }, {
+        const feed = await Feed.update({ tanggalproses: new Date() }, {
             where: {
                 id_people: req.params.id
             }
         })
+        if (!feed) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         await Status.create({
             id_feedback: req.params.id,
             status: req.body.status,
             id_user: req.body.id_user
         })
         res.status(200).json({
-            message: 'Anda Berhasil Update',
-            status: 'success'
+            message: 'success',
+            status: true
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -127,19 +141,26 @@ exports.putOneProcess = async function (req, res) {
 //mengubah data finish
 exports.putOneFinish = async function (req, res) {
     try {
-        await Feed.update({ tanggalselesai: new Date() }, {
+        const feed = await Feed.update({ tanggalselesai: new Date() }, {
             where: {
                 id_people: req.params.id
             }
         })
+        if (!feed) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         res.status(200).json({
-            message: 'Anda Berhasil Update',
-            status: 'success'
+            message: 'success',
+            status: true
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
@@ -147,19 +168,26 @@ exports.putOneFinish = async function (req, res) {
 //mengubah data read
 exports.putOneRead = async function (req, res) {
     try {
-        await Feed.update({ tanggalbaca: new Date() }, {
+        const feed = await Feed.update({ tanggalbaca: new Date() }, {
             where: {
                 id_people: req.params.id
             }
         })
+        if (!feed) {
+            res.status(200).json({
+                message: 'no record',
+                status: false,
+            })
+            return
+        }
         res.status(200).json({
-            message: 'Anda Berhasil Update',
-            status: 'success'
+            message: 'success',
+            status: true
         })
     } catch (err) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + err.message,
-            status: 'failed'
+            message: 'error: ' + err.message,
+            status: false
         })
     }
 }
