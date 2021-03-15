@@ -103,7 +103,7 @@ exports.postOne = async function (req, res) {
     try {
         const peopleExist = await People.count({
             where: {
-                nik: nik
+                nik: req.body.nik
             }
         })
         if (peopleExist) {
@@ -229,7 +229,23 @@ exports.delOne = async function (req, res) {
 exports.getAllProperties = async function (req, res) {
     try {
         const unit = await Unit.findAll({
-            include: [People, Property]
+            include: [
+                {
+                    model: People,
+                    attributes: {
+                        exclude: 'updatedAt'
+                    }
+                },
+                {
+                    model: Property,
+                    attributes: {
+                        exclude: 'updatedAt'
+                    }
+                }
+            ],
+            attributes: {
+                exclude: 'updatedAt'
+            }
         })
         res.status(200).json({
             message: 'success',
@@ -248,7 +264,23 @@ exports.getAllProperties = async function (req, res) {
 exports.getOneProperty = async function (req, res) {
     try {
         const people = await Unit.findOne({
-            include: [People, Property],
+            include: [
+                {
+                    model: People,
+                    attributes: {
+                        exclude: 'updatedAt'
+                    }
+                },
+                {
+                    model: Property,
+                    attributes: {
+                        exclude: 'updatedAt'
+                    }
+                }
+            ],
+            attributes: {
+                exclude: 'updatedAt'
+            },
             where: {
                 id_people: req.params.id
             }
@@ -277,7 +309,15 @@ exports.getOneProperty = async function (req, res) {
 exports.getAllFamilies = async function (req, res) {
     try {
         const people = await People.findAll({
-            include: Family
+            include: {
+                model: Family,
+                attributes: {
+                    exclude: 'updatedAt',
+                }
+            },
+            attributes: {
+                exclude: 'updatedAt'
+            }
         })
         res.status(200).json({
             message: 'success',
@@ -299,6 +339,9 @@ exports.getOneFamily = async function (req, res) {
             include: Family,
             where: {
                 id_people: req.params.id
+            },
+            attributes: {
+                exclude: 'updatedAt'
             }
         })
         if (!people) {
@@ -310,12 +353,23 @@ exports.getOneFamily = async function (req, res) {
         }
         const fam = people.family_model.kk
         const family = await Family.findAll({
-            include: ([People, F_Role]),
+            include: [{
+                model: People,
+                attributes: {
+                    exclude: 'updatedAt'
+                }
+            },
+            {
+                model: F_Role,
+            }],
             where: {
                 kk: fam,
                 id_people: {
                     [Op.ne]: req.params.id
-                }
+                },
+            },
+            attributes: {
+                exclude: 'updatedAt, createdAt'
             }
         })
         var cust = people.toJSON()
@@ -337,8 +391,20 @@ exports.getOneFamily = async function (req, res) {
 exports.getOneInfo = async function (req, res) {
     try {
         const people = await People.findOne({
+            include: [
+                {
+                    model: Unit,
+                    include: [Property]
+                },
+                {
+                    model: Family
+                }
+            ],
             where: {
                 id_people: req.params.id
+            },
+            attributes: {
+                exclude: 'updatedAt'
             }
         })
         if (!people) {
@@ -350,12 +416,23 @@ exports.getOneInfo = async function (req, res) {
         }
         const fam = people.family_model.kk
         const family = await Family.findAll({
-            include: ([People, F_Role]),
+            include: [{
+                model: People,
+                attributes: {
+                    exclude: 'updatedAt'
+                }
+            },
+            {
+                model: F_Role,
+            }],
             where: {
                 kk: fam,
                 id_people: {
                     [Op.ne]: req.params.id
-                }
+                },
+            },
+            attributes: {
+                exclude: 'updatedAt, createdAt'
             }
         })
         var cust = people.toJSON()
