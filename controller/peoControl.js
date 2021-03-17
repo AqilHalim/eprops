@@ -115,10 +115,14 @@ exports.postOne = async function (req, res) {
         }
         const people = await People.create(req.body)
         const id = people.id_people //mengambil id_people dari record people dan memasukkannya dalam variable
+        var role = 3
+        if (req.body.status == 'Menikah') {
+            var role = req.body.role
+        }
         await Family.create({
             id_people: id,
             kk: req.body.kk,
-            role: req.body.role
+            role: role
         })
         await P_Role.create({
             id_people: id,
