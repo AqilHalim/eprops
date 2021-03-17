@@ -101,7 +101,7 @@ exports.getOne = async function (req, res) {
 //menambahkan data
 exports.postOne = async function (req, res) {
     try {
-        const peopleExist = await People.count({
+        const peopleExist = await People.findOne({
             where: {
                 nik: req.body.nik
             }
@@ -113,6 +113,14 @@ exports.postOne = async function (req, res) {
             })
             return
         }
+        const famExist = await People.findAll({
+            include: {
+                model: Family,
+                where: {
+                    kk: req.body.kk
+                },
+            }
+        })
         const people = await People.create(req.body)
         const id = people.id_people //mengambil id_people dari record people dan memasukkannya dalam variable
         var role = 3
@@ -130,7 +138,8 @@ exports.postOne = async function (req, res) {
         })
         res.status(200).json({
             message: 'success',
-            status: true
+            status: true,
+            data: [people, { family_members: [famExist] }]
         })
     } catch (err) {
         res.status(500).json({
