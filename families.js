@@ -8,7 +8,8 @@ router.use(function timeLog(req, res, next) {
 })
 
 const famControl = require('./controller/famControl')
-router.get('/', famControl.getAll)                                 //menampilkan semua data
-router.get('/:id([0-9]+)', famControl.getOne)                        //menampilakn berdasarkan id
+router.get('/', famControl.getAll)                              //menampilkan semua data
+router.get('/:id([0-9]+)', famControl.getOne)                   //menampilakn berdasarkan id
+router.post('/', famControl.postOne)
 
 module.exports = router

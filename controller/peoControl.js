@@ -100,6 +100,13 @@ exports.getOne = async function (req, res) {
 
 //menambahkan data
 exports.postOne = async function (req, res) {
+    if (!req.body.nik) {
+        res.status(200).json({
+            message: 'missing nik',
+            status: false
+        });
+        return
+    }
     try {
         const peopleExist = await People.findOne({
             where: {
@@ -118,7 +125,7 @@ exports.postOne = async function (req, res) {
                 model: Family,
                 where: {
                     kk: req.body.kk
-                },
+                }
             }
         })
         const people = await People.create(req.body)
@@ -127,21 +134,25 @@ exports.postOne = async function (req, res) {
         if (req.body.status === 'Menikah') {
             role = req.body.role
         }
-        await Family.create({
-            id_people: id,
-            kk: req.body.kk,
-            role: role
-        })
         await P_Role.create({
             id_people: id,
             jenisrole: req.body.jenisrole
         })
+        if (req.body.kk) {
+            await Family.create({
+                id_people: id,
+                kk: req.body.kk,
+                role: role
+            })
+        }
         res.status(200).json({
             message: 'success',
             status: true,
-            data: [people, { family_members: [famExist] }]
+            data: people,
+            families: famExist
         })
-    } catch (err) {
+    }
+    catch (err) {
         res.status(500).json({
             message: 'error: ' + err.message,
             status: false
@@ -152,18 +163,23 @@ exports.postOne = async function (req, res) {
 //mengubah data
 exports.putOne = async function (req, res) {
     try {
-        const kk = await Family.findOne({
+        const people = await People.findOne({
             where: {
                 id_people: req.params.id
             }
         })
-        if (!kk) {
+        if (!people) {
             res.status(200).json({
                 message: 'no record',
                 status: false,
             })
             return
         }
+        const kk = await Family.findOne({
+            where: {
+                id_people: req.params.id
+            }
+        })
         const old_kk = kk.kk
         const old_role = kk.role
         await People.update(req.body, {
@@ -171,19 +187,18 @@ exports.putOne = async function (req, res) {
                 id_people: req.params.id
             }
         })
-        if (Family.kk != req.body.kk) {
+        if (old_role !== 1) {
             res.status(403).json({
                 message: 'Tidak Bisa Melakukan Update KK Selain Kepala Keluarga',
                 status: false
             })
             return
-        } else if (old_role == 1) {
-            await Family.update(req.body, {
-                where: {
-                    kk: old_kk
-                }
-            })
         }
+        await Family.update(req.body, {
+            where: {
+                kk: old_kk
+            }
+        })
         res.status(200).json({
             message: 'success',
             status: true
@@ -393,6 +408,34 @@ exports.getOneFamily = async function (req, res) {
             data: cust
         })
     } catch (err) {
+        res.status(500).json({
+            message: 'error: ' + err.message,
+            status: false
+        })
+    }
+}
+
+exports.putOneFamily = async function (req, res) {
+    try {
+        // const people = await People.findOne({
+        //     include: Family,
+        //     where: {
+        //         id_people: req.params.id
+        //     }
+        // })
+        // if (!people) {
+        //     res.status(200).json({
+        //         message: 'no record',
+        //         status: false,
+        //     })
+        //     return
+        // }
+        res.status(200).json({
+            message: 'success',
+            status: true,
+            data: cust
+        })
+    } catch (error) {
         res.status(500).json({
             message: 'error: ' + err.message,
             status: false
