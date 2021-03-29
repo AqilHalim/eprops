@@ -35,7 +35,7 @@ module.exports = sequelize => {
       comment: null,
       field: "hubunganKeluarga",
       references: {
-        key: "role",
+        key: "hubunganKeluarga",
         model: "family_role_model"
       }
     },

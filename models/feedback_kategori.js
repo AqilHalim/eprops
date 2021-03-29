@@ -34,6 +34,8 @@ module.exports = sequelize => {
   };
   const options = {
     tableName: "feedback_kategori",
+    timestamps: true,
+    updatedAt: false,
     comment: "",
     indexes: []
   };

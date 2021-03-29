@@ -33,10 +33,10 @@ P_Role.belongsTo(People, {
     foreignKey: 'id_people'
 })
 F_Role.hasOne(Family, {
-    foreignKey: 'role'
+    foreignKey: 'hubunganKeluarga'
 })
 Family.belongsTo(F_Role, {
-    foreignKey: 'role'
+    foreignKey: 'hubunganKeluarga'
 })
 People.hasMany(Feed, {
     foreignKey: 'id_people'
@@ -131,11 +131,15 @@ exports.postOne = async function (req, res) {
                 }
             }
         })
-        const people = await People.create(req.body)
+        const people = await People.create(req.body, {
+            attributes: {
+                exclude: 'updatedAt'
+            }
+        })
         const id = people.id_people //mengambil id_people dari record people dan memasukkannya dalam variable
-        var role = 3
+        var hubunganKeluarga = 3
         if (req.body.status === 'Menikah') {
-            role = req.body.role
+            hubunganKeluarga = req.body.hubunganKeluarga
         }
         await P_Role.create({
             id_people: id,
@@ -145,7 +149,7 @@ exports.postOne = async function (req, res) {
             await Family.create({
                 id_people: id,
                 kk: req.body.kk,
-                role: role
+                hubunganKeluarga: hubunganKeluarga
             })
         }
         res.status(200).json({
@@ -184,13 +188,13 @@ exports.putOne = async function (req, res) {
             }
         })
         const old_kk = kk.kk
-        const old_role = kk.role
+        const old_hubunganKeluarga = kk.hubunganKeluarga
         await People.update(req.body, {
             where: {
                 id_people: req.params.id
             }
         })
-        if (old_role !== 1) {
+        if (old_hubunganKeluarga !== 1) {
             res.status(403).json({
                 message: 'Tidak Bisa Melakukan Update KK Selain Kepala Keluarga',
                 status: false
@@ -230,7 +234,7 @@ exports.delOne = async function (req, res) {
             return
         }
         const kk = kepala.kk
-        const kpl = kepala.role
+        const kpl = kepala.hubunganKeluarga
         await People.destroy({
             include: Family,
             where: {

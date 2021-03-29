@@ -4,14 +4,14 @@ const {
 
 module.exports = sequelize => {
   const attributes = {
-    role: {
+    hubunganKeluarga: {
       type: DataTypes.INTEGER(5),
       allowNull: false,
       defaultValue: null,
       primaryKey: true,
       autoIncrement: true,
       comment: null,
-      field: "role"
+      field: "hubunganKeluarga"
     },
     jenisrole: {
       type: DataTypes.STRING(10),
@@ -34,6 +34,8 @@ module.exports = sequelize => {
   };
   const options = {
     tableName: "family_role",
+    timestamps: true,
+    updatedAt: false,
     comment: "",
     indexes: []
   };
