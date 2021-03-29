@@ -51,8 +51,6 @@ module.exports = sequelize => {
   };
   const options = {
     tableName: "noticeboard",
-    timestamps: true,
-    updatedAt: false,
     comment: "",
     indexes: [{
       name: "id_noticeboard",

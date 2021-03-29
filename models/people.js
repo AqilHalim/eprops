@@ -43,7 +43,7 @@ module.exports = sequelize => {
     },
     unitRumah: {
       type: DataTypes.INTEGER(10),
-      allowNull: false,
+      allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
@@ -79,7 +79,7 @@ module.exports = sequelize => {
     },
     provinsi: {
       type: DataTypes.INTEGER(10),
-      allowNull: false,
+      allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,

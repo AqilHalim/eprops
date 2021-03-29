@@ -100,8 +100,6 @@ module.exports = sequelize => {
   };
   const options = {
     tableName: "feedback",
-    timestamps: true,
-    updatedAt: false,
     comment: "",
     indexes: [{
       name: "id_notice",

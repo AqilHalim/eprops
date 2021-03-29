@@ -3,10 +3,10 @@ const connection = require('../connection')
 const People = require('../models/people')(connection)
 const Property = require('../models/property')(connection)
 const Unit = require('../models/unit')(connection)
-const P_Role = require('../models/people_role')(connection)
 const Family = require('../models/family')(connection)
 const F_Role = require('../models/family_role')(connection)
 const Feed = require('../models/feedback')(connection)
+//const P_Role = require('../models/people_role')(connection)
 
 People.hasMany(Unit, {
     foreignKey: 'id_people'
@@ -26,12 +26,6 @@ People.hasOne(Family, {
 Family.belongsTo(People, {
     foreignKey: 'id_people'
 })
-People.hasOne(P_Role, {
-    foreignKey: 'id_people'
-})
-P_Role.belongsTo(People, {
-    foreignKey: 'id_people'
-})
 F_Role.hasOne(Family, {
     foreignKey: 'hubunganKeluarga'
 })
@@ -44,6 +38,12 @@ People.hasMany(Feed, {
 Feed.belongsTo(People, {
     foreignKey: 'id_people'
 })
+// People.hasOne(P_Role, {
+//     foreignKey: 'id_people'
+// })
+// P_Role.belongsTo(People, {
+//     foreignKey: 'id_people'
+// })
 
 //menampilkan semua data
 exports.getAll = async function (req, res) {
@@ -141,10 +141,10 @@ exports.postOne = async function (req, res) {
         if (req.body.status === 'Menikah') {
             hubunganKeluarga = req.body.hubunganKeluarga
         }
-        await P_Role.create({
-            id_people: id,
-            jenisrole: req.body.jenisrole
-        })
+        // await P_Role.create({
+        //     id_people: id,
+        //     jenisrole: req.body.jenisrole
+        // })
         if (req.body.kk) {
             await Family.create({
                 id_people: id,
