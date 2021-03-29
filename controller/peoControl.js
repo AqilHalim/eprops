@@ -125,6 +125,9 @@ exports.postOne = async function (req, res) {
                 model: Family,
                 where: {
                     kk: req.body.kk
+                },
+                attributes: {
+                    exclude: 'updatedAt'
                 }
             }
         })

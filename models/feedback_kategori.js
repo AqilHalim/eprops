@@ -21,12 +21,19 @@ module.exports = sequelize => {
       autoIncrement: false,
       comment: null,
       field: "kategori"
+    },
+    createdAt: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "createdAt"
     }
   };
   const options = {
     tableName: "feedback_kategori",
-    timestamps: true,
-    updatedAt: false,
     comment: "",
     indexes: []
   };

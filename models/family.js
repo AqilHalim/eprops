@@ -26,14 +26,14 @@ module.exports = sequelize => {
       comment: null,
       field: "kk"
     },
-    role: {
+    hubunganKeluarga: {
       type: DataTypes.INTEGER(5),
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "role",
+      field: "hubunganKeluarga",
       references: {
         key: "role",
         model: "family_role_model"
@@ -65,7 +65,7 @@ module.exports = sequelize => {
       name: "role",
       unique: false,
       type: "BTREE",
-      fields: ["role"]
+      fields: ["hubunganKeluarga"]
     }]
   };
   const FamilyModel = sequelize.define("family_model", attributes, options);

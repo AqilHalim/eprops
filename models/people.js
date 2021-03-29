@@ -41,8 +41,26 @@ module.exports = sequelize => {
       comment: null,
       field: "alamat"
     },
+    unitRumah: {
+      type: DataTypes.INTEGER(10),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "unitRumah"
+    },
+    kelurahan: {
+      type: DataTypes.INTEGER(10),
+      allowNull: true,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "kelurahan"
+    },
     kecamatan: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.INTEGER(10),
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
@@ -51,13 +69,22 @@ module.exports = sequelize => {
       field: "kecamatan"
     },
     kabupaten: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.INTEGER(10),
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
       field: "kabupaten"
+    },
+    provinsi: {
+      type: DataTypes.INTEGER(10),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "provinsi"
     },
     kodepos: {
       type: DataTypes.INTEGER(5),

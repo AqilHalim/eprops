@@ -41,7 +41,7 @@ module.exports = sequelize => {
       field: "gambar"
     },
     penerima: {
-      type: DataTypes.ARRAY(DataTypes.STRING(50)),
+      type: DataTypes.STRING(50),
       allowNull: true,
       defaultValue: null,
       primaryKey: false,
