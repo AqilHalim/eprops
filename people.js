@@ -1,11 +1,15 @@
 const express = require('express')
 const router = express.Router()
+const authenticate = require('./authenticate')
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
     console.log('Time: ', Date.now())
     next()
 })
+
+//middleware for authenticate
+router.use(authenticate)
 
 const peoControl = require('./controller/peoControl')
 router.get('/', peoControl.getAll)                                     //menampilkan semua data

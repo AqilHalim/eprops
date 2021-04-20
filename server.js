@@ -7,6 +7,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 //panggil routes
+const login = require('./controller/login')     //login.js
+app.post('/login', login)
 const people = require('./people')              //people.js
 app.use('/people', people)
 const property = require('./properties')        //property.js

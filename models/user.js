@@ -4,45 +4,32 @@ const {
 
 module.exports = sequelize => {
   const attributes = {
-    id_status: {
+    id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: null,
       primaryKey: true,
       autoIncrement: true,
       comment: null,
-      field: "id_status"
+      field: "id"
     },
-    id_feedback: {
-      type: DataTypes.INTEGER(11),
+    username: {
+      type: DataTypes.STRING(30),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "id_feedback",
-      references: {
-        key: "id_feedback",
-        model: "feedback_model"
-      }
+      field: "username"
     },
-    status: {
-      type: DataTypes.STRING(50),
+    password: {
+      type: DataTypes.STRING(30),
       allowNull: false,
       defaultValue: null,
       primaryKey: false,
       autoIncrement: false,
       comment: null,
-      field: "status"
-    },
-    id_user: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
-      defaultValue: null,
-      primaryKey: false,
-      autoIncrement: false,
-      comment: null,
-      field: "id_user"
+      field: "password"
     },
     createdAt: {
       type: DataTypes.DATEONLY,
@@ -55,17 +42,12 @@ module.exports = sequelize => {
     }
   };
   const options = {
-    tableName: "feedback_status",
+    tableName: "user",
     timestamps: false,
     createdAt: true,
     comment: "",
-    indexes: [{
-      name: "id_feedback",
-      unique: false,
-      type: "BTREE",
-      fields: ["id_feedback"]
-    }]
+    indexes: []
   };
-  const FeedbackStatusModel = sequelize.define("feedback_status_model", attributes, options);
-  return FeedbackStatusModel;
+  const UserModel = sequelize.define("user_model", attributes, options);
+  return UserModel;
 };

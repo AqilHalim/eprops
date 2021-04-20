@@ -69,6 +69,8 @@ module.exports = sequelize => {
   };
   const options = {
     tableName: "transaksi",
+    timestamps: false,
+    createdAt: true,
     comment: "",
     indexes: [{
       name: "id_property",
