@@ -38,7 +38,6 @@ const login = async function (req, res) {
             nama: user.nama,
             email: user.email,
         }
-
         const token = jwt.sign(payload, secret, exp)
         res.status(200).json({
             status: true,
