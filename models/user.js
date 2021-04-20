@@ -31,6 +31,24 @@ module.exports = sequelize => {
       comment: null,
       field: "password"
     },
+    nama: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "nama"
+    },
+    email: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      defaultValue: null,
+      primaryKey: false,
+      autoIncrement: false,
+      comment: null,
+      field: "email"
+    },
     createdAt: {
       type: DataTypes.DATEONLY,
       allowNull: false,
