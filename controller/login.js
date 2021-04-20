@@ -3,7 +3,7 @@ const connection = require('../connection')
 const user = require("../models/user")
 const User = require('../models/user')(connection)
 
-const secret = process.env.JWT_SECRET || "test"
+const secret = process.env.JWT_SECRET || 'test'
 
 const login = async function (req, res) {
     if (!(req.body.username && req.body.password)) {
