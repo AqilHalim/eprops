@@ -5,27 +5,35 @@ const User = require('../models/user')(connection)
 
 const secret = process.env.JWT_SECRET || 'test'
 
-const login = async function (req, res) {
-    if (!(req.body.username && req.body.password)) {
+const signup = async function (req, res) {
+    if (!req.body) {
         res.status(400).end();
         return
     }
 
     try {
-        const user = await User.findOne({
+        const user = await User.count({
             where: {
                 username: req.body.username.trim().replace(/\s+/g, " "),
-                password: md5(req.body.password)
+                email: req.body.email
             }
         })
 
-        if (!user) {
+        if (user) {
             res.status(401).json({
                 status: false,
-                message: 'username not found'
-            });
+                massage: 'duplicate username or email'
+            })
             return
         }
+
+        const new_user = await User.create({
+            username: req.body.username,
+            password: md5(req.body.password),
+            nama: req.body.nama,
+            email: req.body.email,
+            createdAt: new Date()
+        })
 
         let today = Math.floor(Date.now() / 1000);
         var exp = {
@@ -35,9 +43,9 @@ const login = async function (req, res) {
             iss: 'eprops',
             iat: today,
             expired: exp.expiresIn,
-            id: user.id,
-            nama: user.nama,
-            email: user.email,
+            id: new_user.id,
+            nama: new_user.nama,
+            email: new_user.email,
         }
         const token = jwt.sign(payload, secret, exp)
         res.status(200).json({
@@ -53,4 +61,4 @@ const login = async function (req, res) {
     }
 }
 
-module.exports = login
+module.exports = signup

@@ -9,6 +9,9 @@ app.use(bodyParser.json())
 //panggil routes
 const login = require('./controller/login')     //login.js
 app.post('/login', login)
+const signup = require('./controller/signup')   //signup.js
+app.post('/signup', signup)
+
 const people = require('./people')              //people.js
 app.use('/people', people)
 const property = require('./properties')        //property.js
