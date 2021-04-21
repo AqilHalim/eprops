@@ -1,21 +1,27 @@
 const jwt = require('jsonwebtoken')
 const md5 = require('md5')
+const { Op } = require("sequelize")
 const connection = require('../connection')
 const User = require('../models/user')(connection)
 
 const secret = process.env.JWT_SECRET || 'test'
 
 const signup = async function (req, res) {
-    if (!req.body) {
-        res.status(400).end();
+    if (!((req.body.username), (req.body.password), (req.body.nama), (req.body.email))) {
+        res.status(400).json({
+            status: false,
+            message: 'lengkapi data diri'
+        })
         return
     }
 
     try {
         const user = await User.count({
             where: {
-                username: req.body.username.trim().replace(/\s+/g, " "),
-                email: req.body.email
+                [Op.or]: [
+                    { username: req.body.username.trim().replace(/\s+/g, " ") },
+                    { email: req.body.email }
+                ]
             }
         })
 
