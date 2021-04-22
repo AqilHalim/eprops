@@ -6,6 +6,7 @@ const Unit = require('../models/unit')(connection)
 const Family = require('../models/family')(connection)
 const F_Role = require('../models/family_role')(connection)
 const Feed = require('../models/feedback')(connection)
+const User = require('../models/user')(connection)
 //const P_Role = require('../models/people_role')(connection)
 
 People.hasMany(Unit, {
@@ -236,7 +237,7 @@ exports.delOne = async function (req, res) {
         const kk = kepala.kk
         const kpl = kepala.hubunganKeluarga
         await People.destroy({
-            include: Family,
+            include: [Family, User],
             where: {
                 id_people: req.params.id
             }
