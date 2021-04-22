@@ -1,6 +1,4 @@
 const jwt = require("jsonwebtoken")
-const connection = require('./connection')
-const User = require('./models/user')(connection)
 
 const secret = process.env.JWT_SECRET || 'test'
 

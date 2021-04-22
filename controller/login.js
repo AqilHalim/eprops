@@ -7,7 +7,7 @@ const secret = process.env.JWT_SECRET || 'test'
 
 const login = async function (req, res) {
     if (!(req.body.username && req.body.password)) {
-        res.status(400).end();
+        res.status(400).end()
         return
     }
 
@@ -22,7 +22,7 @@ const login = async function (req, res) {
         if (!user) {
             res.status(401).json({
                 status: false,
-                message: 'username not found'
+                message: 'incorrect username or password'
             });
             return
         }
