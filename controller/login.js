@@ -47,8 +47,8 @@ const login = async function (req, res) {
         });
     } catch (error) {
         res.status(500).json({
-            message: 'Terdapat Error: ' + error.message,
-            status: false
+            status: false,
+            message: 'Terdapat Error: ' + error.message
         });
     }
 }
