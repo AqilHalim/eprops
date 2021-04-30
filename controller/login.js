@@ -37,7 +37,7 @@ const login = async function (req, res) {
             expired: exp.expiresIn,
             id: user.id,
             nama: user.nama,
-            email: user.email,
+            email: user.email
         }
         const token = jwt.sign(payload, secret, exp)
         res.status(200).json({
